@@ -1,0 +1,101 @@
+catalogs:
+  greenhouse:
+    enabled: true
+    boards:
+      - {slug: formlabs, company: Formlabs}
+      - {slug: samsara, company: Samsara}
+      - {slug: scaleai, company: Scale AI}
+      - {slug: andurilindustries, company: Anduril Industries}
+      - {slug: datadog, company: Datadog}
+      - {slug: pivotbio, company: Pivot Bio}
+
+  ashby:
+    enabled: true
+    boards:
+      - {slug: formenergy, company: Form Energy}
+      - {slug: watershed, company: Watershed}
+      - {slug: crusoe, company: Crusoe}
+
+  lever:
+    enabled: true
+    boards:
+      - {slug: palantir, company: Palantir}
+      - {slug: veo, company: Veo}
+      - {slug: protolabs, company: Protolabs}
+
+  hiringroom:
+    enabled: true
+    boards:
+      - {slug: vicuna, company: Vicuña}
+      - {slug: mansfieldminera, company: Mansfield Minera}
+      - {slug: tgn, company: TGN}
+      - {slug: litoralgas, company: Litoral Gas}
+      - {slug: minerasantacruz, company: Minera Santa Cruz}
+      - {slug: superiorenergy, company: Superior Energy}
+      - {slug: mspconsultora, company: MSP Consultora}
+      - {slug: essity, company: Essity}
+      - {slug: patagoniaresources, company: Patagonia Resources}
+      - {slug: kaeserargentina, company: Kaeser Argentina}
+      - {slug: cementosavellaneda, company: Cementos Avellaneda}
+      - {slug: sinteplast, company: Sinteplast}
+      - {slug: desasa, company: DESA}
+      - {slug: grupocorven, company: Grupo Corven}
+      - {slug: ferrovias, company: Ferrovías}
+
+feeds:
+  remoteok: {enabled: true, results_wanted: 500}
+  jobicy: {enabled: true, results_wanted: 50}
+  arbeitnow: {enabled: true, results_wanted: 100, pages: 10}
+  remotive: {enabled: true, results_wanted: 500}
+
+verticals:
+  rigzone:
+    enabled: true
+    results_wanted: 50
+    locations: [Argentina, Brazil, Chile, Mexico, Saudi Arabia, United States]
+    terms:
+      - process engineer
+      - chemical engineer
+      - production engineer
+      - reliability engineer
+      - maintenance engineer
+      - instrumentation engineer
+      - process control
+      - operations engineer
+      - project engineer
+      - data analyst
+
+blocked_sources:
+  careermine:
+    reason: "HTTP 202 empty anti-bot response from unattended requests."
+  bumeran:
+    reason: "Client-only Navent app; public HTML contains no listings."
+  zonajobs:
+    reason: "Client-only Navent app; public HTML contains no listings."
+  google_jobs:
+    reason: "Repeated HTTP 429 responses."
+  glassdoor:
+    reason: "Upstream API errors and zero Argentina results."
+
+api_sources:
+  adzuna:
+    enabled: true
+    requires_env: [ADZUNA_APP_ID, ADZUNA_APP_KEY]
+    countries:
+      - {code: gb, location: United Kingdom}
+      - {code: de, location: Germany}
+      - {code: es, location: Spain}
+      - {code: ca, location: Canada}
+      - {code: au, location: Australia}
+      - {code: us, location: United States}
+
+experimental_jobspy:
+  google:
+    enabled: false
+    reason: "HTTP 429 in June 2026 probes; connector remains supported."
+  glassdoor:
+    enabled: false
+    reason: "Zero results and upstream API errors in Argentina probes."
+  zip_recruiter:
+    enabled: false
+    reason: "Mostly US-only inventory; enable for targeted sponsorship research."

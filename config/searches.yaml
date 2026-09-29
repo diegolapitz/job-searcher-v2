@@ -1,0 +1,231 @@
+searches:
+  - id: arg_core_engineering
+    family: process_production_plant
+    terms:
+      - process engineer
+      - ingeniero de procesos
+      - chemical engineer
+      - ingeniero químico
+      - production engineer
+      - ingeniero de producción
+      - plant engineer
+      - ingeniería de planta
+      - process control engineer
+      - process optimization
+      - optimización de procesos
+      - project engineer industrial
+      - ingeniero de proyectos industriales
+    locations:
+      - Argentina
+      - Buenos Aires
+      - Córdoba
+      - Rosario
+      - Mendoza
+      - Neuquén
+      - San Juan
+      - Salta
+      - Catamarca
+      - Bahía Blanca
+    countries: [Argentina, Argentina, Argentina, Argentina, Argentina, Argentina, Argentina, Argentina, Argentina, Argentina]
+    sources: [linkedin, indeed]
+    lookback_hours: 720
+    priority: high
+
+  - id: arg_reliability_maintenance
+    family: reliability_assets_maintenance
+    terms:
+      - reliability engineer
+      - ingeniero de confiabilidad
+      - asset performance
+      - asset management
+      - gestión de activos
+      - maintenance engineer
+      - ingeniero de mantenimiento
+      - predictive maintenance
+      - mantenimiento predictivo
+      - condition monitoring
+      - RCM engineer
+      - maintenance planner
+      - planificador de mantenimiento
+    locations: [Argentina, Buenos Aires, Córdoba, Rosario, Mendoza, Neuquén, San Juan, Salta]
+    countries: [Argentina, Argentina, Argentina, Argentina, Argentina, Argentina, Argentina, Argentina]
+    sources: [linkedin, indeed]
+    lookback_hours: 720
+    priority: high
+
+  - id: arg_operations_improvement
+    family: operations_improvement
+    terms:
+      - continuous improvement
+      - mejora continua
+      - operational excellence
+      - excelencia operacional
+      - process improvement
+      - industrial performance
+      - eficiencia operativa
+      - operations analyst
+      - analista de operaciones
+      - lean manufacturing
+      - six sigma
+      - production supervisor
+      - supervisor de producción
+    locations: [Argentina, Buenos Aires, Córdoba, Rosario, Mendoza, Neuquén]
+    countries: [Argentina, Argentina, Argentina, Argentina, Argentina, Argentina]
+    sources: [linkedin, indeed, computrabajo]
+    lookback_hours: 720
+    priority: high
+
+  - id: arg_industrial_data
+    family: industrial_data_digital
+    terms:
+      - industrial data analyst
+      - manufacturing analytics
+      - operations analytics
+      - process data analyst
+      - analista de datos industrial
+      - business intelligence industrial
+      - Power BI industrial
+      - digital manufacturing
+      - industria 4.0
+      - digital transformation industrial
+      - transformación digital industrial
+      - industrial IoT
+      - MES engineer
+      - process historian
+      - data engineer manufacturing
+      - data scientist industrial
+    locations: [Argentina, Buenos Aires, Córdoba, Rosario, Mendoza, Neuquén]
+    countries: [Argentina, Argentina, Argentina, Argentina, Argentina, Argentina]
+    sources: [linkedin, indeed, computrabajo]
+    lookback_hours: 720
+    priority: high
+
+  - id: arg_supply_planning
+    family: supply_chain_planning
+    terms:
+      - supply chain analyst
+      - supply chain analytics
+      - production planning
+      - planificación de producción
+      - demand planning
+      - S&OP analyst
+      - logistics analyst
+      - logistics analytics
+      - inventory optimization
+      - planeamiento industrial
+      - analista de abastecimiento
+      - procurement analyst
+    locations: [Argentina, Buenos Aires, Córdoba, Rosario]
+    countries: [Argentina, Argentina, Argentina, Argentina]
+    sources: [linkedin, indeed, computrabajo]
+    lookback_hours: 720
+    priority: high
+
+  - id: arg_automation_quality_energy
+    family: automation_quality_energy
+    terms:
+      - automation engineer
+      - ingeniero de automatización
+      - instrumentation engineer
+      - instrumentación y control
+      - OT engineer
+      - SCADA engineer
+      - quality engineer
+      - ingeniero de calidad
+      - process safety engineer
+      - energy efficiency
+      - eficiencia energética
+      - sustainability analyst
+      - environmental engineer
+      - ingeniero ambiental
+    locations: [Argentina, Buenos Aires, Córdoba, Rosario, Mendoza, Neuquén, San Juan]
+    countries: [Argentina, Argentina, Argentina, Argentina, Argentina, Argentina, Argentina]
+    sources: [linkedin, indeed]
+    lookback_hours: 720
+    priority: high
+
+  - id: arg_industry_verticals
+    family: industry_verticals
+    terms:
+      - minería ingeniería
+      - mining engineer analytics
+      - oil gas process engineer
+      - petróleo gas ingeniería
+      - pharma manufacturing
+      - pharmaceutical operations
+      - healthcare operations analyst
+      - food process engineer
+      - ingeniero alimentos procesos
+      - renewable energy engineer
+      - hydrogen engineer
+      - lithium process engineer
+      - pulp paper process engineer
+      - cement process engineer
+    locations: [Argentina, Neuquén, San Juan, Salta, Jujuy, Catamarca, Mendoza, Bahía Blanca]
+    countries: [Argentina, Argentina, Argentina, Argentina, Argentina, Argentina, Argentina, Argentina]
+    sources: [linkedin, indeed]
+    lookback_hours: 720
+    priority: high
+
+  - id: remote_latam
+    family: remote_latam
+    terms:
+      - process engineer
+      - industrial data analyst
+      - manufacturing analytics
+      - operations analyst
+      - continuous improvement
+      - reliability engineer
+      - supply chain analytics
+      - healthcare operations
+      - data analyst
+      - business intelligence analyst
+      - Power BI analyst
+      - data engineer
+      - sustainability analyst
+      - energy analyst
+    locations: [Remote Argentina, Remote LATAM, Remote South America, Worldwide]
+    countries: [Argentina, USA, USA, USA]
+    sources: [linkedin, indeed]
+    lookback_hours: 336
+    priority: high
+
+  - id: international_sponsorship
+    family: international_sponsorship
+    terms:
+      - process engineer visa sponsorship
+      - chemical engineer visa sponsorship
+      - manufacturing engineer relocation
+      - reliability engineer sponsorship
+      - process engineer relocation package
+      - industrial data analyst sponsorship
+      - operational excellence relocation
+      - expatriate process engineer
+    locations: [United Kingdom, Germany, Spain, Canada, Australia, United States, Saudi Arabia, Netherlands]
+    countries: [UK, Germany, Spain, Canada, Australia, USA, Saudi Arabia, Netherlands]
+    sources: [linkedin, indeed]
+    lookback_hours: 720
+    priority: medium
+
+  - id: computrabajo_broad
+    family: argentina_broad
+    terms:
+      - ingeniero
+      - procesos
+      - producción
+      - mantenimiento
+      - confiabilidad
+      - mejora continua
+      - analista de datos
+      - Power BI
+      - supply chain
+      - automatización
+      - calidad
+      - minería
+      - petróleo
+      - energía
+    locations: [Argentina]
+    countries: [Argentina]
+    sources: [computrabajo]
+    lookback_hours: 720
+    priority: high

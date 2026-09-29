@@ -1,0 +1,28 @@
+database_url: sqlite:///data/job_searcher_v2.sqlite3
+interval_hours: 48
+parallel_workers: 8
+results_per_search: 30
+collection:
+  request_timeout_seconds: 30
+  request_batch_size: 100
+  persist_batch_size: 500
+  evaluate_batch_size: 500
+ai:
+  enabled: true
+  model: claude-haiku-4-5-20251001
+  prompt_version: v2.1
+  max_description_chars: 6000
+  max_tokens: 700
+  max_evaluations_per_run: 30
+  minimum_prefilter_score: 20
+notifications:
+  enabled: true
+  minimum_priority_score: 72
+  maximum_items: 8
+market_intelligence:
+  minimum_description_chars: 100
+  default_days: 90
+  exclude_low_confidence: true
+source_health:
+  disable_after_consecutive_failures: 5
+  minimum_description_rate: 0.5
