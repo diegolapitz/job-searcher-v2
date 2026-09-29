@@ -1,58 +1,22 @@
-# Job Searcher V2
+# Job Searcher
 
-Aplicación local para buscar oportunidades laborales y estudiar cómo evoluciona el mercado de trabajo. Reúne avisos de distintas fuentes, conserva sus observaciones en el tiempo, normaliza duplicados y ayuda a priorizar postulaciones. El mismo historial alimenta un tablero con tendencias de roles, habilidades, empresas y ubicaciones.
+Armé este proyecto para seguir búsquedas de empleo en ingeniería y análisis de datos sin tener que revisar cada portal por separado. Junta ofertas de distintas fuentes, detecta duplicados y permite ordenar las oportunidades según su relevancia.
 
-## Finalidad
+Además de mostrar vacantes, guarda un historial para ver qué roles, habilidades y empresas aparecen con más frecuencia.
 
-El proyecto nació para combinar dos necesidades: encontrar vacantes relevantes para un perfil de ingeniería y análisis de datos, y construir una base histórica que permita entender qué pide el mercado. Las búsquedas, empresas objetivo y criterios de evaluación se pueden adaptar en `config/`.
+## Qué hace
 
-## Cómo está construido
+- Recolecta y normaliza ofertas de portales, feeds públicos y páginas de empleo de empresas.
+- Guarda las ofertas y sus cambios en una base local.
+- Muestra un tablero para filtrar oportunidades, revisar postulaciones y explorar tendencias del mercado.
+- Puede evaluar ofertas con Claude y enviar alertas por Telegram si se configuran esas integraciones.
 
-- **Python 3.12** coordina la recolección, normalización, deduplicación y evaluación de avisos. Los conectores consultan bolsas de trabajo, feeds públicos y sistemas de contratación de empresas.
-- **SQLite + SQLAlchemy** guardan avisos, capturas originales, evaluaciones y corridas. Los archivos locales de datos se excluyen del repositorio.
-- **FastAPI** expone los datos y operaciones al tablero, además de documentación en `/docs`.
-- **React + Vite** presentan el radar de oportunidades y las vistas de inteligencia de mercado.
-- La evaluación usa reglas locales y, opcionalmente, **Claude** para los candidatos que superan el filtro previo. Las alertas por **Telegram** también son opcionales.
+## Tecnologías
 
-## Puesta en marcha
+Backend en **Python** con **FastAPI**, **SQLAlchemy** y **SQLite**. Frontend en **React** con **Vite**. Las búsquedas y fuentes se ajustan desde los archivos de `config/`.
 
-Requisitos: Python 3.12 y Node.js con npm. En Windows, `setup_v2.bat` instala las dependencias e inicializa una base vacía; `run_v2.bat` abre la API y el tablero. También se puede iniciar manualmente:
+## Uso local
 
-```powershell
-python -m pip install -e ".[dev]"
-python -m app.cli init-db
-python -m app.cli serve
-```
+Con Python 3.12 y Node.js instalados, en Windows ejecutá `setup_v2.bat` una vez y después `run_v2.bat`. El tablero queda en [localhost:5173](http://localhost:5173).
 
-En otra terminal:
-
-```powershell
-cd frontend
-npm install
-npm run dev
-```
-
-Tablero: http://localhost:5173 · API: http://localhost:8765 · Documentación API: http://localhost:8765/docs
-
-Copiá `.env.example` a `.env` solo si vas a usar integraciones que requieren claves. Sin claves, podés explorar el tablero con una base vacía y ejecutar recolecciones compatibles con fuentes públicas. Para probar una corrida sin evaluación de IA ni notificaciones:
-
-```powershell
-python -m app.cli run --dry-run --max-requests 50
-```
-
-`run --dry-run` sí consulta fuentes externas y puede tardar. La ejecución normal (`python -m app.cli run`) puede usar servicios con costo y enviar avisos si configuraste sus credenciales. Ajustá `config/settings.yaml` y `config/sources.yaml` antes de activarla.
-
-Si tenés un CSV generado por la versión anterior, lo podés importar con `python -m app.cli migrate-v1 RUTA_AL_CSV`. El CSV histórico y la base local no forman parte de este repositorio.
-
-## Organización
-
-| Carpeta | Contenido |
-| --- | --- |
-| `app/connectors/` | Integraciones con fuentes de avisos |
-| `app/services/` | Identidad, normalización, evaluación y alertas |
-| `app/api.py`, `app/cli.py`, `app/pipeline.py` | API, comandos y coordinación de corridas |
-| `config/` | Búsquedas, empresas y parámetros |
-| `frontend/` | Tablero React |
-| `tests/` | Pruebas del núcleo |
-
-La cobertura y disponibilidad de cada fuente pueden cambiar con el tiempo. El sistema conserva las observaciones originales para poder auditar resultados y evita interpretar cambios de cobertura como cambios del mercado.
+Las claves para Claude, Telegram y otras fuentes son opcionales y se configuran en `.env` a partir de `.env.example`. La base de datos local y las credenciales no están incluidas en el repositorio.
