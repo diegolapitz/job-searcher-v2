@@ -14,6 +14,8 @@ from app.db import init_db, session_scope
 from app.migration import migrate_v1
 from app.models import Evaluation, Job, RawJob, Run
 from app.pipeline import run_pipeline
+from app.scheduler import run_scheduler
+from app.services.reevaluate import reevaluate_jobs
 from app.services.logging import configure_logging
 
 
@@ -32,6 +34,17 @@ def main() -> None:
         help="Comma-separated source allowlist, e.g. greenhouse,ashby,hiringroom",
     )
     run.add_argument("--max-requests", type=int)
+    schedule = subparsers.add_parser("schedule")
+    schedule.add_argument("--interval-hours", type=float)
+    schedule.add_argument("--no-notify", action="store_true")
+    schedule.add_argument("--no-run-now", action="store_true")
+    schedule.add_argument("--sources")
+    schedule.add_argument("--max-requests", type=int)
+    reevaluate = subparsers.add_parser("re-evaluate")
+    reevaluate.add_argument("--use-ai", action="store_true")
+    reevaluate.add_argument("--limit", type=int)
+    reevaluate.add_argument("--dry-run", action="store_true")
+    reevaluate.add_argument("--force", action="store_true")
     serve = subparsers.add_parser("serve")
     serve.add_argument(
         "--port", type=int, default=int(os.getenv("JOB_SEARCHER_API_PORT", "8765"))
@@ -52,13 +65,31 @@ def main() -> None:
                 run_pipeline(
                     dry_run=args.dry_run,
                     notify=not args.no_notify,
-                    only_sources={
-                        source.strip().casefold()
-                        for source in (args.sources or "").split(",")
-                        if source.strip()
-                    }
-                    or None,
+                    only_sources=_source_allowlist(args.sources),
                     max_requests=args.max_requests,
+                ),
+                indent=2,
+                ensure_ascii=False,
+            )
+        )
+    elif args.command == "schedule":
+        init_db()
+        run_scheduler(
+            interval_hours=args.interval_hours,
+            notify=not args.no_notify,
+            only_sources=_source_allowlist(args.sources),
+            max_requests=args.max_requests,
+            run_now=not args.no_run_now,
+        )
+    elif args.command == "re-evaluate":
+        init_db()
+        print(
+            json.dumps(
+                reevaluate_jobs(
+                    use_ai=args.use_ai,
+                    limit=args.limit,
+                    dry_run=args.dry_run,
+                    force=args.force,
                 ),
                 indent=2,
                 ensure_ascii=False,
@@ -70,6 +101,15 @@ def main() -> None:
     elif args.command == "audit":
         init_db()
         print(json.dumps(audit_database(), indent=2, ensure_ascii=False))
+
+
+def _source_allowlist(value: str | None) -> set[str] | None:
+    sources = {
+        source.strip().casefold()
+        for source in (value or "").split(",")
+        if source.strip()
+    }
+    return sources or None
 
 
 def audit_database() -> dict:

@@ -1,231 +1,177 @@
+# Query sources only. Company ATS catalogs, public feeds and vertical boards are
+# collected once per source from sources.yaml to avoid multiplying full feeds.
 searches:
-  - id: arg_core_engineering
-    family: process_production_plant
+  - id: industrial_digitalization
+    family: Industrial Digitalization and Datalization
+    purpose: Principal fuente de oportunidades inmediatamente aplicables.
     terms:
-      - process engineer
-      - ingeniero de procesos
-      - chemical engineer
-      - ingeniero químico
-      - production engineer
-      - ingeniero de producción
-      - plant engineer
-      - ingeniería de planta
-      - process control engineer
-      - process optimization
-      - optimización de procesos
-      - project engineer industrial
-      - ingeniero de proyectos industriales
-    locations:
-      - Argentina
-      - Buenos Aires
-      - Córdoba
-      - Rosario
-      - Mendoza
-      - Neuquén
-      - San Juan
-      - Salta
-      - Catamarca
-      - Bahía Blanca
-    countries: [Argentina, Argentina, Argentina, Argentina, Argentina, Argentina, Argentina, Argentina, Argentina, Argentina]
-    sources: [linkedin, indeed]
-    lookback_hours: 720
-    priority: high
-
-  - id: arg_reliability_maintenance
-    family: reliability_assets_maintenance
-    terms:
-      - reliability engineer
-      - ingeniero de confiabilidad
-      - asset performance
-      - asset management
-      - gestión de activos
-      - maintenance engineer
-      - ingeniero de mantenimiento
-      - predictive maintenance
-      - mantenimiento predictivo
-      - condition monitoring
-      - RCM engineer
-      - maintenance planner
-      - planificador de mantenimiento
-    locations: [Argentina, Buenos Aires, Córdoba, Rosario, Mendoza, Neuquén, San Juan, Salta]
-    countries: [Argentina, Argentina, Argentina, Argentina, Argentina, Argentina, Argentina, Argentina]
-    sources: [linkedin, indeed]
-    lookback_hours: 720
-    priority: high
-
-  - id: arg_operations_improvement
-    family: operations_improvement
-    terms:
-      - continuous improvement
-      - mejora continua
-      - operational excellence
-      - excelencia operacional
-      - process improvement
-      - industrial performance
-      - eficiencia operativa
-      - operations analyst
-      - analista de operaciones
-      - lean manufacturing
-      - six sigma
-      - production supervisor
-      - supervisor de producción
-    locations: [Argentina, Buenos Aires, Córdoba, Rosario, Mendoza, Neuquén]
-    countries: [Argentina, Argentina, Argentina, Argentina, Argentina, Argentina]
-    sources: [linkedin, indeed, computrabajo]
-    lookback_hours: 720
-    priority: high
-
-  - id: arg_industrial_data
-    family: industrial_data_digital
-    terms:
-      - industrial data analyst
-      - manufacturing analytics
-      - operations analytics
-      - process data analyst
-      - analista de datos industrial
-      - business intelligence industrial
-      - Power BI industrial
-      - digital manufacturing
+      - datalizacion industrial
+      - digitalizacion industrial
+      - transformacion digital industria
       - industria 4.0
-      - digital transformation industrial
-      - transformación digital industrial
-      - industrial IoT
-      - MES engineer
-      - process historian
-      - data engineer manufacturing
-      - data scientist industrial
-    locations: [Argentina, Buenos Aires, Córdoba, Rosario, Mendoza, Neuquén]
-    countries: [Argentina, Argentina, Argentina, Argentina, Argentina, Argentina]
-    sources: [linkedin, indeed, computrabajo]
-    lookback_hours: 720
-    priority: high
-
-  - id: arg_supply_planning
-    family: supply_chain_planning
-    terms:
-      - supply chain analyst
-      - supply chain analytics
-      - production planning
-      - planificación de producción
-      - demand planning
-      - S&OP analyst
-      - logistics analyst
-      - logistics analytics
-      - inventory optimization
-      - planeamiento industrial
-      - analista de abastecimiento
-      - procurement analyst
-    locations: [Argentina, Buenos Aires, Córdoba, Rosario]
-    countries: [Argentina, Argentina, Argentina, Argentina]
-    sources: [linkedin, indeed, computrabajo]
-    lookback_hours: 720
-    priority: high
-
-  - id: arg_automation_quality_energy
-    family: automation_quality_energy
-    terms:
-      - automation engineer
-      - ingeniero de automatización
-      - instrumentation engineer
-      - instrumentación y control
-      - OT engineer
-      - SCADA engineer
-      - quality engineer
-      - ingeniero de calidad
-      - process safety engineer
-      - energy efficiency
-      - eficiencia energética
-      - sustainability analyst
-      - environmental engineer
-      - ingeniero ambiental
-    locations: [Argentina, Buenos Aires, Córdoba, Rosario, Mendoza, Neuquén, San Juan]
-    countries: [Argentina, Argentina, Argentina, Argentina, Argentina, Argentina, Argentina]
+      - soluciones digitales industria
+      - manufactura digital
+      - industrial digitalization
+      - digital manufacturing
+      - digital transformation engineer
+      - industry 4.0 engineer
+      - manufacturing digitalization
+      - digital solutions engineer
+    negative_terms: [marketing digital, ERP functional, SAP functional, ecommerce]
+    locations: [Argentina, "Remote, Argentina"]
+    countries: [Argentina, Argentina]
     sources: [linkedin, indeed]
-    lookback_hours: 720
-    priority: high
+    lookback_hours: 72
+    priority: 1
 
-  - id: arg_industry_verticals
-    family: industry_verticals
+  - id: industrial_analytics_ai
+    family: Industrial Analytics and Applied Data
+    purpose: Roles tecnicos de datos aplicados a procesos, operaciones y manufactura.
     terms:
-      - minería ingeniería
-      - mining engineer analytics
-      - oil gas process engineer
-      - petróleo gas ingeniería
-      - pharma manufacturing
-      - pharmaceutical operations
-      - healthcare operations analyst
-      - food process engineer
-      - ingeniero alimentos procesos
-      - renewable energy engineer
-      - hydrogen engineer
-      - lithium process engineer
-      - pulp paper process engineer
-      - cement process engineer
-    locations: [Argentina, Neuquén, San Juan, Salta, Jujuy, Catamarca, Mendoza, Bahía Blanca]
-    countries: [Argentina, Argentina, Argentina, Argentina, Argentina, Argentina, Argentina, Argentina]
-    sources: [linkedin, indeed]
-    lookback_hours: 720
-    priority: high
-
-  - id: remote_latam
-    family: remote_latam
-    terms:
-      - process engineer
-      - industrial data analyst
+      - analitica industrial
+      - datos industriales
+      - analitica avanzada industria
+      - analitica de procesos
+      - machine learning industrial
+      - inteligencia artificial industrial
+      - industrial analytics
+      - industrial data engineer
       - manufacturing analytics
-      - operations analyst
-      - continuous improvement
-      - reliability engineer
-      - supply chain analytics
-      - healthcare operations
-      - data analyst
-      - business intelligence analyst
-      - Power BI analyst
-      - data engineer
-      - sustainability analyst
-      - energy analyst
-    locations: [Remote Argentina, Remote LATAM, Remote South America, Worldwide]
-    countries: [Argentina, USA, USA, USA]
+      - operations data scientist
+      - process analytics
+      - industrial AI
+      - manufacturing data scientist
+    negative_terms: [marketing analytics, CRM, advertising, growth analytics]
+    locations: [Argentina, "Remote, Argentina"]
+    countries: [Argentina, Argentina]
     sources: [linkedin, indeed]
-    lookback_hours: 336
-    priority: high
+    lookback_hours: 72
+    priority: 2
 
-  - id: international_sponsorship
-    family: international_sponsorship
+  - id: optimization_applied_ml
+    family: Process Optimization and Applied AI
+    purpose: Apuestas tecnicas de alto valor y demanda futura.
     terms:
-      - process engineer visa sponsorship
-      - chemical engineer visa sponsorship
-      - manufacturing engineer relocation
-      - reliability engineer sponsorship
-      - process engineer relocation package
-      - industrial data analyst sponsorship
-      - operational excellence relocation
-      - expatriate process engineer
-    locations: [United Kingdom, Germany, Spain, Canada, Australia, United States, Saudi Arabia, Netherlands]
-    countries: [UK, Germany, Spain, Canada, Australia, USA, Saudi Arabia, Netherlands]
+      - optimizacion industrial
+      - optimizacion de procesos
+      - optimizacion de produccion
+      - programacion de produccion
+      - machine learning manufactura
+      - optimization engineer
+      - process optimization
+      - production optimization
+      - manufacturing optimization
+      - production scheduling optimization
+      - operations research manufacturing
+      - applied machine learning industrial
+      - solver engineer manufacturing
+    negative_terms: [quantitative finance, ad optimization, marketing optimization]
+    locations: [Argentina, "Remote, Argentina", Spain]
+    countries: [Argentina, Argentina, Spain]
     sources: [linkedin, indeed]
-    lookback_hours: 720
-    priority: medium
+    lookback_hours: 96
+    priority: 3
 
-  - id: computrabajo_broad
-    family: argentina_broad
+  - id: industrial_solutions_consulting
+    family: Industrial AI and Digital Solutions
+    purpose: Interseccion tecnologia-industria-negocio con ownership de solucion.
     terms:
-      - ingeniero
-      - procesos
-      - producción
-      - mantenimiento
-      - confiabilidad
-      - mejora continua
-      - analista de datos
-      - Power BI
-      - supply chain
-      - automatización
-      - calidad
-      - minería
-      - petróleo
-      - energía
+      - consultor transformacion digital industrial
+      - ingeniero de soluciones industriales
+      - consultor industria 4.0
+      - consultor inteligencia artificial industrial
+      - ingeniero de soluciones IA
+      - industrial solutions engineer
+      - AI solutions engineer manufacturing
+      - industrial AI consultant
+      - digital manufacturing consultant
+      - industrial technology consultant
+      - solutions consultant manufacturing
+    negative_terms: [generic SaaS sales, consumer, MarTech]
+    locations: [Argentina, "Remote, Argentina"]
+    countries: [Argentina, Argentina]
+    sources: [linkedin, indeed]
+    lookback_hours: 96
+    priority: 4
+
+  - id: process_control_digital
+    family: Process Control and Advanced Process Engineering
+    purpose: Ingenieria con digitalizacion, APC, analytics u optimizacion real.
+    terms:
+      - control de procesos avanzado
+      - optimizacion operativa
+      - procesos advanced analytics
+      - ingeniero de procesos digital
+      - process control engineer
+      - advanced process control
+      - process performance engineer
+      - process engineer analytics
+      - process digitalization
+    negative_terms: [routine production supervision]
+    locations: [Argentina, Spain]
+    countries: [Argentina, Spain]
+    sources: [linkedin, indeed]
+    lookback_hours: 96
+    priority: 5
+
+  - id: wildcard_project_development
+    family: Technical Project Development and Business Development
+    purpose: Wildcards de alto impacto sin contaminar el ranking tecnico principal.
+    terms:
+      - desarrollo de proyectos industriales
+      - desarrollo de negocios industrial
+      - ingeniero tecnico comercial industria
+      - gerente de desarrollo de proyectos industrial
+      - project development manager industrial
+      - technical business development industrial
+      - technical sales engineer industrial
+      - project development engineer industrial
+    negative_terms: [retail sales, insurance, real estate, consumer sales, call center]
+    locations: [Argentina, Spain]
+    countries: [Argentina, Spain]
+    sources: [linkedin, indeed]
+    lookback_hours: 168
+    priority: 6
+
+  - id: europe_relocation_market
+    family: Cross-family European industrial digital roles
+    purpose: Inteligencia para una transicion internacional 2027 o posterior.
+    terms:
+      - digitalizacion industrial
+      - optimizacion industrial
+      - analitica industrial
+      - industrial AI
+      - digital manufacturing
+      - process optimization
+      - industrial analytics
+      - digital solutions manufacturing
+      - manufacturing data
+    negative_terms: []
+    locations: [Spain, Germany]
+    countries: [Spain, Germany]
+    sources: [linkedin, indeed]
+    lookback_hours: 168
+    priority: 7
+
+  - id: argentina_local_boards
+    family: Cross-family Argentina discovery
+    purpose: Cobertura local complementaria en Computrabajo.
+    terms:
+      - digitalizacion industrial
+      - transformacion digital
+      - industria 4.0
+      - datos industriales
+      - analitica industrial
+      - optimizacion de procesos
+      - inteligencia artificial industrial
+      - control de procesos
+      - ingeniero de soluciones
+      - ingeniero de datos
+      - ingeniero de proyectos industriales
+      - automatizacion industrial
+    negative_terms: []
     locations: [Argentina]
     countries: [Argentina]
     sources: [computrabajo]
-    lookback_hours: 720
-    priority: high
+    lookback_hours: 168
+    priority: 8

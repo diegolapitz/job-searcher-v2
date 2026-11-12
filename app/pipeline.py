@@ -9,7 +9,7 @@ from datetime import datetime
 
 from sqlalchemy import desc, select
 
-from app.config import searches, settings, source_catalog, watchlist
+from app.config import searches, settings, source_catalog, strategy, watchlist
 from app.connectors import (
     AdzunaConnector,
     CatalogATSConnector,
@@ -41,6 +41,7 @@ logger = logging.getLogger(__name__)
 
 def build_collection_requests() -> list[tuple[str, CollectionRequest]]:
     results_wanted = int(settings()["results_per_search"])
+    strategy_version = strategy()["version"]
     requests: list[tuple[str, CollectionRequest]] = []
     for search in searches():
         for term in search["terms"]:
@@ -57,6 +58,12 @@ def build_collection_requests() -> list[tuple[str, CollectionRequest]]:
                                 country=country,
                                 lookback_hours=int(search["lookback_hours"]),
                                 results_wanted=results_wanted,
+                                options={
+                                    "negative_terms": search.get("negative_terms", []),
+                                    "priority": search.get("priority"),
+                                    "purpose": search.get("purpose", ""),
+                                    "strategy_version": strategy_version,
+                                },
                             ),
                         )
                     )
@@ -76,7 +83,7 @@ def build_collection_requests() -> list[tuple[str, CollectionRequest]]:
                         country="",
                         lookback_hours=24 * 365,
                         results_wanted=10_000,
-                        options=board,
+                        options={**board, "strategy_version": strategy_version},
                     ),
                 )
             )
@@ -95,7 +102,7 @@ def build_collection_requests() -> list[tuple[str, CollectionRequest]]:
                     country="",
                     lookback_hours=720,
                     results_wanted=int(config.get("results_wanted", 500)),
-                    options=config,
+                    options={**config, "strategy_version": strategy_version},
                 ),
             )
         )
@@ -116,7 +123,7 @@ def build_collection_requests() -> list[tuple[str, CollectionRequest]]:
                             country=location,
                             lookback_hours=720,
                             results_wanted=int(config.get("results_wanted", 50)),
-                            options=config,
+                            options={**config, "strategy_version": strategy_version},
                         ),
                     )
                 )
@@ -147,7 +154,12 @@ def build_collection_requests() -> list[tuple[str, CollectionRequest]]:
                             country=country["location"],
                             lookback_hours=720,
                             results_wanted=50,
-                            options={**country, "country_code": country["code"], "pages": 2},
+                            options={
+                                **country,
+                                "country_code": country["code"],
+                                "pages": 2,
+                                "strategy_version": strategy_version,
+                            },
                         ),
                     )
                 )
@@ -190,6 +202,21 @@ def build_collection_requests() -> list[tuple[str, CollectionRequest]]:
     return list(unique.values())
 
 
+def _merge_job_metadata(job: Job, request: CollectionRequest) -> None:
+    metadata = dict(job.raw_metadata or {})
+    values = {
+        "families": request.family,
+        "search_ids": request.search_id,
+        "strategy_versions": request.options.get("strategy_version"),
+    }
+    for key, value in values.items():
+        existing = list(metadata.get(key) or [])
+        if value and value not in existing:
+            existing.append(value)
+        metadata[key] = existing
+    job.raw_metadata = metadata
+
+
 def connector_for(source: str):
     if source in {"linkedin", "indeed", "google", "glassdoor", "zip_recruiter"}:
         return JobSpyConnector(source)
@@ -218,8 +245,13 @@ def run_pipeline(
 ) -> dict:
     started = time.perf_counter()
     mode = "dry-run" if dry_run else "live"
+    strategy_version = strategy()["version"]
     with session_scope() as session:
-        run = Run(status="running", mode=mode)
+        run = Run(
+            status="running",
+            mode=mode,
+            notes=f"strategy={strategy_version}",
+        )
         session.add(run)
         session.flush()
         run_id = run.id
@@ -340,6 +372,7 @@ def _execute_pipeline(
                 )
                 content_hash = payload_hash(safe_payload)
                 job = session.scalar(select(Job).where(Job.canonical_id == canonical_id))
+                changed = False
                 if job is None:
                     job = Job(
                         canonical_id=canonical_id,
@@ -351,8 +384,9 @@ def _execute_pipeline(
                             name in normalized["company"].casefold()
                             for name in watchlist_names
                         ),
-                        raw_metadata={"families": [result.request.family]},
+                        raw_metadata={},
                     )
+                    _merge_job_metadata(job, result.request)
                     session.add(job)
                     session.flush()
                     new_jobs.append(job.id)
@@ -365,10 +399,12 @@ def _execute_pipeline(
                         .limit(1)
                     )
                     job.last_seen_at = datetime.utcnow()
+                    _merge_job_metadata(job, result.request)
                     if len(normalized.get("description") or "") > len(job.description or ""):
                         job.description = normalized["description"]
                     if previous_hash and previous_hash != content_hash:
                         job.last_changed_at = datetime.utcnow()
+                        changed = True
 
                 session.add(
                     RawJob(
@@ -389,7 +425,7 @@ def _execute_pipeline(
                         source=normalized["source"],
                         search_id=result.request.search_id,
                         content_hash=content_hash,
-                        changed=False,
+                        changed=changed,
                     )
                 )
             source_run.new_count = source_new
@@ -400,9 +436,17 @@ def _execute_pipeline(
     if new_jobs:
         evaluator = JobEvaluator()
         ai_config = settings()["ai"]
+        thresholds = strategy()["thresholds"]
         ai_limit = 0 if dry_run else int(ai_config["max_evaluations_per_run"])
-        minimum_prefilter = int(ai_config["minimum_prefilter_score"])
-        threshold = int(settings()["notifications"]["minimum_priority_score"])
+        minimum_prefilter = int(
+            thresholds.get("ai_prefilter_priority", 20)
+        )
+        priority_threshold = int(
+            thresholds.get("notification_priority", 72)
+        )
+        feasibility_threshold = int(
+            thresholds.get("notification_feasibility", 55)
+        )
         with session_scope() as session:
             preliminary = []
             for job_id in new_jobs:
@@ -432,8 +476,8 @@ def _execute_pipeline(
                 if (
                     not dry_run
                     and
-                    result.priority_score >= threshold
-                    and result.application_feasibility >= 55
+                    result.priority_score >= priority_threshold
+                    and result.application_feasibility >= feasibility_threshold
                     and result.recommendation != "discard"
                 ):
                     shortlisted.append(
@@ -450,7 +494,11 @@ def _execute_pipeline(
     notified = 0
     notification_error = None
     if not dry_run and notify and shortlisted:
-        maximum = int(settings()["notifications"]["maximum_items"])
+        maximum = int(
+            strategy()["thresholds"].get(
+                "maximum_daily_review", settings()["notifications"]["maximum_items"]
+            )
+        )
         shortlisted = sorted(
             shortlisted, key=lambda item: item["priority_score"], reverse=True
         )[:maximum]
@@ -484,6 +532,7 @@ def _execute_pipeline(
         run.notes = "; ".join(
             note
             for note in (
+                f"strategy={strategy()['version']}",
                 f"ai_evaluations={ai_evaluated}" if not dry_run else None,
                 notification_error,
             )

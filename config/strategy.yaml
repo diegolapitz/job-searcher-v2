@@ -1,0 +1,470 @@
+version: v3.0-industrial-digital-agency
+status: active
+source_confidence: 92
+description: >-
+  Estrategia activa para detectar oportunidades aplicables hoy y apuestas de
+  carrera en la interseccion entre industria, datos, software, automatizacion,
+  inteligencia artificial, machine learning y optimizacion. Mantiene una capa
+  separada de inteligencia de mercado para observar la evolucion del perfil.
+primary_objective: >-
+  Transformar problemas industriales reales mediante datos y tecnologia,
+  preservando oportunidades excepcionales de negocio industrial, liderazgo,
+  autonomia y calidad de vida.
+opportunity_vs_market_intelligence:
+  opportunity_weight: 0.70
+  market_intelligence_weight: 0.30
+
+profile:
+  summary: >-
+    Ingeniero quimico con experiencia en procesos de electrolisis de
+    aluminio y una especializacion emergente, construida desde la operacion
+    real, en datos industriales, automatizacion, software analitico e IA/ML
+    aplicada. Perfil hibrido proceso-tecnologia con Oracle/SQL, Python,
+    aplicaciones web operativas, analytics y modelos predictivos. Busca mayor
+    impacto, agencia, aprendizaje, autonomia y opcionalidad; no convertirse
+    exclusivamente en Data Scientist ni programador.
+  differentiators:
+    - Conocimiento de procesos industriales reales combinado con capacidad de construir soluciones digitales.
+    - Traduccion de necesidades operativas ambiguas a herramientas usadas por planta e ingenieria.
+    - Experiencia con Oracle, series temporales, mediciones imperfectas y eventos operativos.
+    - Recorrido completo desde problema fisico hasta SQL, Python, visualizacion, prototipo y usuario.
+    - Dominio poco comun en electrolisis de aluminio y procesos intensivos en energia.
+    - Potencial para solutions, product, consulting y liderazgo tecnologico industrial.
+  uncertainties:
+    - Piso de compensacion para cambiar no configurado.
+    - Permisos laborales fuera de Argentina no configurados.
+    - Nivel de ingles operativo no verificado.
+    - Preferencia contractual no configurada.
+
+role_families:
+  core:
+    - family: Industrial Digitalization and Datalization
+      priority: 1
+      titles_es:
+        - gestor de datalizacion
+        - especialista en digitalizacion industrial
+        - ingeniero de transformacion digital
+        - especialista industria 4.0
+        - ingeniero de soluciones digitales
+        - analista de transformacion digital
+      titles_en:
+        - industrial digitalization engineer
+        - digital transformation engineer
+        - manufacturing digitalization engineer
+        - industry 4.0 engineer
+        - digital solutions engineer
+        - digital manufacturing engineer
+    - family: Industrial Analytics and Applied Data
+      priority: 2
+      titles_es:
+        - ingeniero de datos industriales
+        - especialista en analitica industrial
+        - analista de datos industriales
+        - especialista en analitica avanzada
+        - ingeniero de analitica de procesos
+      titles_en:
+        - industrial data engineer
+        - industrial analytics engineer
+        - manufacturing data analyst
+        - advanced analytics engineer
+        - process analytics engineer
+        - operations data scientist
+    - family: Process Optimization and Applied AI
+      priority: 3
+      titles_es:
+        - ingeniero de optimizacion de procesos
+        - ingeniero de analitica predictiva
+        - especialista en ia industrial
+        - ingeniero de machine learning industrial
+        - ingeniero de optimizacion industrial
+      titles_en:
+        - process optimization engineer
+        - industrial ai engineer
+        - applied machine learning engineer
+        - manufacturing data scientist
+        - optimization engineer
+        - ai optimization engineer
+    - family: Industrial AI and Digital Solutions
+      priority: 4
+      titles_es:
+        - ingeniero de soluciones de ia
+        - consultor de ia industrial
+        - especialista en soluciones digitales
+        - consultor de transformacion digital industrial
+      titles_en:
+        - ai solutions engineer
+        - industrial ai consultant
+        - digital solutions consultant
+        - ai solutions consultant
+        - industrial technology consultant
+  adjacent:
+    - family: Process Control and Advanced Process Engineering
+      priority: 5
+      titles_es:
+        - ingeniero de control de procesos
+        - ingeniero de procesos avanzados
+        - ingeniero de optimizacion operativa
+      titles_en:
+        - process control engineer
+        - advanced process engineer
+        - process performance engineer
+        - operational optimization engineer
+    - family: Technical Product and Industrial Digital Product
+      priority: 6
+      titles_es:
+        - product manager tecnico
+        - product owner de soluciones digitales
+        - product manager industrial
+      titles_en:
+        - technical product manager
+        - digital product owner
+        - industrial product manager
+        - ai product manager
+    - family: Industrial Data Engineering and Automation
+      priority: 7
+      titles_es:
+        - ingeniero de datos
+        - ingeniero de automatizacion de datos
+        - ingeniero de integracion de datos industriales
+      titles_en:
+        - data engineer
+        - industrial data engineer
+        - data automation engineer
+        - manufacturing data engineer
+  exploratory:
+    - family: Technical Project Development and Business Development
+      priority: 8
+      titles_es:
+        - gerente de desarrollo de proyectos
+        - ingeniero de desarrollo de negocios
+        - ingeniero tecnico comercial
+        - ingeniero de proyectos comerciales
+      titles_en:
+        - project development manager
+        - technical business development engineer
+        - technical sales engineer
+        - project development engineer
+    - family: Industrial Technology Consulting
+      priority: 9
+      titles_es:
+        - consultor de tecnologia industrial
+        - consultor de industria 4.0
+        - consultor de transformacion operativa
+      titles_en:
+        - industrial technology consultant
+        - industry 4.0 consultant
+        - digital manufacturing consultant
+        - operations transformation consultant
+    - family: Industrial Software Solutions
+      priority: 10
+      titles_es:
+        - ingeniero de soluciones
+        - consultor de soluciones industriales
+        - ingeniero de aplicaciones digitales
+      titles_en:
+        - solutions engineer
+        - industrial solutions engineer
+        - application engineer
+        - pre-sales solutions engineer
+  excluded:
+    - family: Generic Business Intelligence
+      titles_and_keywords: [bi analyst, power bi developer, reporting analyst, dashboard developer, analista bi, analista de reporting]
+    - family: Generic Data Science disconnected from real operations
+      titles_and_keywords: [data scientist, machine learning engineer, ml engineer, ai engineer, ai developer, marketing data scientist, adtech data scientist, customer analytics, growth analytics, crm analytics]
+    - family: Pure Software Engineering
+      titles_and_keywords: [software engineer, software developer, frontend developer, full stack developer, backend software engineer, mobile developer, web developer]
+    - family: Pure IT and infrastructure
+      titles_and_keywords: [it support, sysadmin, cloud administrator, network engineer, help desk, oracle functional]
+    - family: Traditional process engineering without digital component
+      titles_and_keywords: [ingeniero de procesos, process engineer, production engineer, ingeniero de produccion]
+    - family: Pure academic or research AI
+      titles_and_keywords: [research scientist, ai researcher, deep learning research scientist, postdoctoral researcher]
+    - family: Healthcare analytics
+      titles_and_keywords: [healthcare data analyst, clinical data analyst, health data scientist]
+    - family: Routine quality, laboratory and chemistry roles
+      titles_and_keywords: [laboratory analyst, qc analyst, quality control chemist, analista de laboratorio, analista de calidad]
+    - family: Generic corporate support functions
+      titles_and_keywords: [finance, finanzas, accounting, accountant, contabilidad, tax analyst, human resources, recruiter]
+    - family: Talent pools and evergreen communities
+      titles_and_keywords: [talent community, banco de talentos, talent pool, expression of interest]
+
+industries:
+  priority:
+    - aluminio, metales y mineria
+    - energia
+    - oil and gas
+    - quimica y petroquimica
+    - manufactura avanzada
+    - automotriz
+    - industrial software
+    - automatizacion industrial
+    - utilities e infraestructura industrial
+  acceptable:
+    - manufactura farmaceutica
+    - alimentos y bebidas industriales
+    - pulp and paper
+    - cemento
+    - supply chain industrial
+    - aerospace manufacturing
+    - semiconductores
+    - consultoria tecnologica industrial
+
+seniority:
+  minimum: Junior avanzado o Engineer con 1-2 anos; graduate solo si aprendizaje y compensacion son excepcionales.
+  ideal: Engineer, Specialist, Associate o Mid-level con 2-4 anos o requisitos flexibles.
+  maximum: Senior IC o primer liderazgo cuando valore capacidad demostrable por encima de anos.
+  notes: >-
+    No usar anos como hard filter salvo extremos. Mostrar 3-5 anos si el match es
+    alto. Penalizar 6+ obligatorios, people management probado u ownership
+    estrategico senior. No descartar por titulo Senior solamente.
+
+heuristic:
+  industry_required_role_families:
+    - Technical Product and Industrial Digital Product
+    - Industrial Data Engineering and Automation
+    - Technical Project Development and Business Development
+    - Industrial Software Solutions
+  target_title_terms:
+    - industrial digitalization
+    - digitalizacion industrial
+    - digital transformation engineer
+    - ingeniero de transformacion digital
+    - digital manufacturing
+    - manufactura digital
+    - industry 4.0
+    - industria 4.0
+    - industrial analytics
+    - analitica industrial
+    - industrial data
+    - datos industriales
+    - data engineer
+    - ingeniero de datos
+    - data insights
+    - process analytics
+    - analitica de procesos
+    - industrial ai
+    - ia industrial
+    - machine learning industrial
+    - manufacturing data scientist
+    - process optimization
+    - optimizacion de procesos
+    - production optimization
+    - optimizacion de produccion
+    - process control
+    - control de procesos
+    - advanced process
+    - procesos avanzados
+    - process improvement
+    - mejora de procesos
+    - industrial solutions
+    - soluciones industriales
+    - ai solutions engineer
+    - ingeniero de soluciones ia
+    - digital solutions engineer
+    - industrial technology consultant
+    - consultor de tecnologia industrial
+    - technical business development
+    - desarrollo de negocios industrial
+  strong_industry_terms:
+    - aluminum
+    - aluminium
+    - aluminio
+    - metal
+    - metalurg*
+    - mining
+    - mineria
+    - energy
+    - energia
+    - oil and gas
+    - petrochemical
+    - petroquim*
+    - chemical
+    - quimic*
+    - manufactur*
+    - automotive
+    - automotriz
+    - industrial
+    - plant
+    - planta
+    - factory
+    - fabrica
+    - refinery
+    - refineria
+    - smelter
+    - fundicion
+    - utilities
+    - cement
+    - pulp and paper
+    - semiconductor
+    - aerospace
+    - supply chain
+    - logistics
+    - logistica
+  context_industry_terms:
+    - process
+    - proceso
+    - production
+    - produccion
+    - operations
+    - operaciones
+    - reliability
+    - maintenance
+    - infrastructure
+    - automation
+    - control
+  technical_terms:
+    - python
+    - sql
+    - oracle
+    - pandas
+    - power bi
+    - analytics
+    - analitica
+    - data
+    - datos
+    - machine learning
+    - ml
+    - artificial intelligence
+    - inteligencia artificial
+    - industrial ai
+    - genai
+    - llm
+    - optimization
+    - optimizacion
+    - operations research
+    - scheduling
+    - forecasting
+    - anomaly detection
+    - predictive
+    - apc
+    - mes
+    - historian
+    - scada
+    - digital twin
+    - flask
+    - streamlit
+    - api
+    - docker
+    - cloud
+    - mlops
+    - time series
+    - series temporales
+  career_value_terms:
+    - digital transformation
+    - transformacion digital
+    - digitalization
+    - digitalizacion
+    - industry 4.0
+    - industria 4.0
+    - digital solutions
+    - soluciones digitales
+    - advanced analytics
+    - analitica avanzada
+    - optimization
+    - optimizacion
+    - artificial intelligence
+    - inteligencia artificial
+    - machine learning
+    - product
+    - consulting
+    - consultoria
+    - prototype
+    - prototipo
+    - innovation
+    - innovacion
+  ownership_terms:
+    - ownership
+    - lead
+    - liderar
+    - implement*
+    - implementar*
+    - deploy
+    - productionize
+    - stakeholder
+    - cross-functional
+    - customer
+    - client
+    - cliente
+    - operations
+    - operacion
+    - roadmap
+    - discovery
+  strong_industry_points_per_match: 18
+  context_industry_points_per_match: 5
+  technical_points_per_match: 10
+
+feasibility:
+  home_countries: [Argentina]
+  home_country_score: 100
+  remote_score: 95
+  remote_unknown_score: 35
+  remote_restricted_score: 0
+  foreign_with_support_score: 75
+  foreign_onsite_score: 10
+  remote_eligible_terms: [worldwide, work from anywhere, anywhere in the world, latin america, latam, argentina, americas, global remote, remote globally]
+  remote_restricted_terms: [remote us only, remote us, us home office, us only, u.s. only, must reside in the us, must be based in the us, authorized to work in the us, work authorization in the united states, within the united states, canada only, europe only, eu only, uk only]
+  hard_restriction_terms: [us citizenship required, u.s. citizenship required, security clearance required, active security clearance, itar required, no sponsorship available, unable to sponsor]
+  sponsorship_terms: [visa sponsorship, sponsorship available, sponsor work visa, work permit support]
+  relocation_terms: [relocation assistance, relocation package, relocation support, visa and relocation]
+  instructions:
+    - Argentina es factible salvo una restriccion legal explicita.
+    - Remoto global o LATAM que acepta Argentina tiene factibilidad alta.
+    - Remoto sin alcance geografico confirmado tiene factibilidad baja hasta verificarlo.
+    - Presencial fuera de Argentina requiere sponsorship, permiso o relocation explicitos.
+    - No inferir sponsorship por pais o marca de la empresa.
+    - ITAR, clearance, ciudadania obligatoria o no-sponsorship implican factibilidad cero.
+
+scoring:
+  dimensions:
+    profile_match: 0.25
+    technical_match: 0.20
+    industry_match: 0.15
+    career_value: 0.30
+    seniority_match: 0.10
+  fit_weight: 0.70
+  feasibility_weight: 0.30
+  confidence_floor: 55
+  confidence_penalty_weight: 0.25
+
+thresholds:
+  ai_prefilter_priority: 45
+  today_priority: 72
+  today_feasibility: 60
+  high_priority: 82
+  high_feasibility: 75
+  notification_priority: 90
+  notification_feasibility: 75
+  maximum_daily_review: 12
+
+ai:
+  extra_instructions:
+    - Separar ajuste profesional de factibilidad legal y geografica.
+    - Priorizar valor de carrera, agencia, aprendizaje y proximidad a problemas reales.
+    - No exigir coincidencia literal cuando las capacidades son transferibles.
+    - Una brecha aprendible no debe matar una oportunidad excelente.
+    - No confundir uso de Power BI con transformacion industrial.
+    - Exigir evidencia del aviso para cada score y bajar confianza si falta descripcion.
+
+market_intelligence:
+  reporting_frequency: semanal para oportunidades, mensual estructural y trimestral para tendencias.
+  metrics:
+    - vacantes nuevas por familia y semana
+    - aplicables hoy versus inteligencia de mercado
+    - seniority y anos requeridos
+    - frecuencia de skills tecnicas y backgrounds aceptados
+    - remoto elegible desde Argentina
+    - sponsorship o relocation
+    - industria, geografia y compensacion
+    - prototipado, ownership e interaccion con operaciones o clientes
+    - empresas recurrentes y tiempo de vida de la vacante
+    - skills emergentes, gaps y motivos de rechazo
+    - feedback del usuario sobre oportunidades mostradas
+  role_taxonomy: [industrial_digitalization, industrial_analytics, industrial_ai_ml, process_optimization, process_control_apc, industrial_data_engineering, digital_product, industrial_solutions, industrial_consulting, technical_project_development, technical_business_development, traditional_process, generic_data, generic_bi, pure_software]
+  skill_taxonomy: [domain_process_engineering, sql, python, analytics, statistics, power_bi, data_engineering, machine_learning, genai_llm, agents, optimization_or, apc_control, mes_historians_itot, cloud, mlops, product_management, consulting, stakeholder_management, technical_sales, people_leadership]
+
+blocking_defaults:
+  salary: Sin hard floor; rankear solo cuando este publicado.
+  foreign_onsite: Requiere sponsorship, relocation o evidencia de elegibilidad.
+  english: Intermedio; no rechazar ingles, penalizar client-facing nativo obligatorio.
+  buenos_aires: Preferir hibrido de hasta 2-3 dias; penalizar cinco dias y commute largo.
+  wildcards: No notificar salvo prioridad excepcional; incluir en resumen semanal.

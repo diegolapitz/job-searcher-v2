@@ -1,15 +1,15 @@
 # Roadmap posterior al primer release
 
-## Conectores próximos
+## Conectores
 
-1. Greenhouse.
-2. Lever.
-3. Ashby.
-4. SmartRecruiters.
-5. Hiring Room.
-6. Get on Board.
-7. Bumeran/ZonaJobs si existe una ruta estable y legalmente razonable.
-8. EURES y portales europeos con APIs o feeds estables.
+Greenhouse, Lever, Ashby y Hiring Room ya están implementados. Próximos pasos:
+
+1. SmartRecruiters.
+2. Get on Board.
+3. EURES y portales europeos con APIs o feeds estables.
+4. Bumeran/ZonaJobs sólo si aparece una ruta estable y legalmente razonable.
+5. Reactivar Google Jobs, Glassdoor o ZipRecruiter únicamente después de medir
+   costo, estabilidad y yield incremental frente a LinkedIn/Indeed.
 
 ## Inteligencia de mercado
 

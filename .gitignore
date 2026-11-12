@@ -10,4 +10,6 @@ logs/
 frontend/node_modules/
 frontend/dist/
 docs/design/
+docs/strategy-v3-source.yaml
+graphify-out/
 *.log

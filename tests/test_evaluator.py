@@ -50,5 +50,62 @@ def test_keyword_fallback_can_surface_strong_jobs():
 
     result = evaluator.keyword_fallback(job)
 
-    assert result.confidence == 75
+    assert result.confidence >= 65
     assert result.priority_score >= 55
+
+
+def test_keyword_fallback_does_not_treat_all_remote_jobs_as_globally_feasible():
+    evaluator = JobEvaluator.__new__(JobEvaluator)
+    evaluator.model = "test"
+    evaluator.prompt_version = "test"
+
+    def evaluate(location, description):
+        return evaluator.keyword_fallback(
+            SimpleNamespace(
+                title="Industrial Data Analyst",
+                company="Example",
+                location_text=location,
+                description=description,
+                country="Remote",
+                work_mode="remote",
+            )
+        )
+
+    latam = evaluate("Remote", "Remote role open to candidates across LATAM.")
+    unknown = evaluate("Remote", "Work with an international analytics team.")
+    restricted = evaluate("Your Remote US Home Office", "US home office role.")
+
+    assert latam.application_feasibility == 95
+    assert unknown.application_feasibility == 35
+    assert restricted.application_feasibility == 0
+    assert latam.priority_score > unknown.priority_score > restricted.priority_score
+
+
+def test_traditional_process_role_requires_a_digital_component():
+    evaluator = JobEvaluator.__new__(JobEvaluator)
+    evaluator.model = "test"
+    evaluator.prompt_version = "test"
+
+    def evaluate(description):
+        return evaluator.keyword_fallback(
+            SimpleNamespace(
+                title="Process Engineer",
+                company="Example",
+                location_text="Argentina",
+                description=description,
+                country="Argentina",
+                work_mode="onsite",
+            )
+        )
+
+    conventional = evaluate(
+        "Monitor production, maintain procedures and coordinate daily plant routines."
+    )
+    digital = evaluate(
+        "Optimize an industrial process using Python, SQL, advanced analytics, "
+        "machine learning and automation with operations stakeholders."
+    )
+
+    assert conventional.recommendation == "discard"
+    assert digital.priority_score > conventional.priority_score
+    assert digital.recommendation != "discard"

@@ -62,3 +62,32 @@ conector sin métricas de resultados, descripciones, errores y nuevos canónicos
 
 Una alerta se considera enviada únicamente después de que Telegram confirma el
 request. Un reinicio no convierte automáticamente una oportunidad en notificada.
+
+## 2026-11-12 — Estrategia versionada y operación recurrente
+
+Perfil, heurística, pesos, factibilidad y thresholds pasan a
+`config/strategy.yaml`. La versión de estrategia queda registrada en cada nueva
+corrida y evaluación. Se agrega un backfill que genera evaluaciones nuevas sin
+sobrescribir las anteriores y un scheduler residente, serial, que evita solapar
+corridas dentro del mismo proceso.
+
+Esta es una capa de compatibilidad previa a modelar `SearchStrategy` como entidad
+relacional. Las búsquedas continúan en `searches.yaml`, y la versión de cada
+corrida queda por ahora en `Run.notes`.
+
+## 2026-11-12 — Activar estrategia industrial-digital v3
+
+Se adopta `v3.0-industrial-digital-agency` como contrato operativo. Valor de
+carrera pasa a ser la dimension de fit con mayor peso. Factibilidad permanece
+separada y exige evidencia para remoto internacional, sponsorship o relocation.
+Healthcare y data/software genericos dejan de ser objetivos.
+
+La especificacion original se preserva localmente y esta ignorada por Git por
+contener contexto personal; `config/strategy.yaml` es su traduccion ejecutable.
+La matriz se limita a 429 requests de alta senal. La amplitud se logra con
+keywords y fuentes complementarias, no repitiendo feeds completos por cada
+termino. El dashboard muestra como maximo 12 oportunidades bajo 72/60.
+
+La identidad persistida sigue siendo source-scoped para no fusionar avisos de
+forma destructiva. Como mitigacion inmediata, la API oculta duplicados exactos
+de titulo, empresa y ubicacion. La unificacion historica queda pendiente.

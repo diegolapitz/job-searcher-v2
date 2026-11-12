@@ -1,16 +1,27 @@
 from __future__ import annotations
 
+from contextlib import asynccontextmanager
 from datetime import datetime, timedelta
+from difflib import SequenceMatcher
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy import and_, case, desc, func, or_, select
 
+from app.config import strategy
 from app.db import init_db, session_scope
-from app.models import Application, Evaluation, Job, JobObservation, Run, SourceRun
+from app.models import Application, Evaluation, Job, Run, SourceRun
+from app.services.identity import normalize_text
 
-app = FastAPI(title="Job Searcher V2 API", version="0.1.0")
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    init_db()
+    yield
+
+
+app = FastAPI(title="Job Searcher V2 API", version="0.1.0", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
@@ -26,11 +37,6 @@ class ApplicationUpdate(BaseModel):
     notes: str | None = None
 
 
-@app.on_event("startup")
-def startup() -> None:
-    init_db()
-
-
 def latest_evaluation_subquery():
     return (
         select(Evaluation.job_id, func.max(Evaluation.id).label("evaluation_id"))
@@ -44,20 +50,18 @@ def scope_condition(scope: str):
     if scope == "argentina":
         return Job.country == "Argentina"
     if scope == "argentina_remote":
-        remote_latam_jobs = select(JobObservation.job_id).where(
-            JobObservation.search_id == "remote_latam"
-        )
-        remote_signal = func.lower(
-            func.coalesce(Job.title, "") + " " + func.coalesce(Job.location_text, "")
+        latest = latest_evaluation_subquery()
+        feasible_remote_jobs = (
+            select(Evaluation.job_id)
+            .join(latest, Evaluation.id == latest.c.evaluation_id)
+            .where(
+                Evaluation.application_feasibility
+                >= int(strategy()["thresholds"].get("today_feasibility", 60))
+            )
         )
         return and_(
-            Job.id.in_(remote_latam_jobs),
-            or_(
-                remote,
-                remote_signal.contains("remote"),
-                remote_signal.contains("remoto"),
-                remote_signal.contains("desde casa"),
-            ),
+            remote,
+            Job.id.in_(feasible_remote_jobs),
         )
     if scope == "remote":
         return remote
@@ -83,6 +87,51 @@ def scope_condition(scope: str):
     return None
 
 
+def _deduplicate_job_rows(rows):
+    deduplicated = []
+    indexes_by_role = {}
+    for row in rows:
+        job, _, application = row
+        title_key = normalize_text(job.title)
+        company_key = normalize_text(job.company)
+        location_key = normalize_text(
+            (job.location_text or job.country or "").split(",", maxsplit=1)[0]
+        )
+        role_key = title_key
+        existing_index = None
+        if title_key and company_key:
+            for candidate_index in indexes_by_role.get(role_key, []):
+                candidate_job = deduplicated[candidate_index][0]
+                candidate_company = normalize_text(candidate_job.company)
+                candidate_location = normalize_text(
+                    (candidate_job.location_text or candidate_job.country or "").split(
+                        ",", maxsplit=1
+                    )[0]
+                )
+                company_match = (
+                    SequenceMatcher(None, company_key, candidate_company).ratio()
+                    >= 0.86
+                )
+                location_match = (
+                    location_key == candidate_location
+                    or location_key in candidate_location
+                    or candidate_location in location_key
+                    or SequenceMatcher(
+                        None, location_key, candidate_location
+                    ).ratio()
+                    >= 0.70
+                )
+                if company_match and location_match:
+                    existing_index = candidate_index
+                    break
+        if existing_index is None:
+            indexes_by_role.setdefault(role_key, []).append(len(deduplicated))
+            deduplicated.append(row)
+        elif application is not None and deduplicated[existing_index][2] is None:
+            deduplicated[existing_index] = row
+    return deduplicated
+
+
 @app.get("/api/health")
 def health():
     with session_scope() as session:
@@ -94,9 +143,22 @@ def health():
         }
 
 
+@app.get("/api/strategy")
+def active_strategy():
+    data = strategy()
+    return {
+        "version": data["version"],
+        "status": data.get("status", "active"),
+        "description": data.get("description", ""),
+        "profile_summary": data.get("profile", {}).get("summary", ""),
+        "thresholds": data.get("thresholds", {}),
+    }
+
+
 @app.get("/api/overview")
 def overview():
     latest = latest_evaluation_subquery()
+    thresholds = strategy()["thresholds"]
     with session_scope() as session:
         total = session.scalar(select(func.count(Job.id))) or 0
         active = session.scalar(select(func.count(Job.id)).where(Job.is_active)) or 0
@@ -105,8 +167,10 @@ def overview():
                 select(func.count(Evaluation.id))
                 .join(latest, Evaluation.id == latest.c.evaluation_id)
                 .where(
-                    Evaluation.priority_score >= 72,
-                    Evaluation.application_feasibility >= 55,
+                    Evaluation.priority_score
+                    >= int(thresholds.get("high_priority", 72)),
+                    Evaluation.application_feasibility
+                    >= int(thresholds.get("high_feasibility", 55)),
                 )
             )
             or 0
@@ -187,10 +251,11 @@ def jobs(
                 desc(func.coalesce(Evaluation.priority_score, 0)),
                 desc(Job.first_seen_at),
             )
-            .limit(limit)
-            .offset(offset)
+            .limit(min(2000, max(limit, (offset + limit) * 3)))
         )
-        rows = session.execute(statement).all()
+        rows = _deduplicate_job_rows(session.execute(statement).all())[
+            offset : offset + limit
+        ]
         return [_job_dict(job, evaluation, application) for job, evaluation, application in rows]
 
 
@@ -404,8 +469,12 @@ def _evaluation_dict(evaluation):
         "confidence": evaluation.confidence,
         "recommendation": evaluation.recommendation,
         "reason": evaluation.reason,
-        "evidence_for": evaluation.evidence_for or [],
-        "evidence_against": evaluation.evidence_against or [],
+        "evidence_for": [
+            str(item).replace("*", "") for item in (evaluation.evidence_for or [])
+        ],
+        "evidence_against": [
+            str(item).replace("*", "") for item in (evaluation.evidence_against or [])
+        ],
         "skills": evaluation.skills or [],
         "years_experience": evaluation.years_experience,
         "english_level": evaluation.english_level,

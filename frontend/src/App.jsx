@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Area,
   AreaChart,
@@ -28,6 +28,17 @@ const emptyOverview = {
 };
 
 const emptyFilterOptions = { scopes: [], countries: [], work_modes: [] };
+const emptyStrategy = {
+  version: "cargando",
+  status: "loading",
+  description: "",
+  profile_summary: "",
+  thresholds: {
+    today_priority: 72,
+    today_feasibility: 60,
+    maximum_daily_review: 12,
+  },
+};
 
 export default function App() {
   const [view, setView] = useState("today");
@@ -41,21 +52,28 @@ export default function App() {
   const [runs, setRuns] = useState([]);
   const [sources, setSources] = useState([]);
   const [filterOptions, setFilterOptions] = useState(emptyFilterOptions);
+  const [strategyConfig, setStrategyConfig] = useState(emptyStrategy);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const jobsRequestId = useRef(0);
   const [filters, setFilters] = useState({
     scope: "",
     country: "",
     work_mode: "",
     source: "",
-    minimum_priority: 55,
-    minimum_feasibility: 40,
+    minimum_priority: 72,
+    minimum_feasibility: 60,
   });
 
   const loadJobs = useCallback(async () => {
+    const requestId = ++jobsRequestId.current;
     setLoading(true);
     try {
-      const data = await api.jobs({ ...filters, q: query, limit: 150 });
+      const limit = view === "today"
+        ? strategyConfig.thresholds.maximum_daily_review || 12
+        : 150;
+      const data = await api.jobs({ ...filters, q: query, limit });
+      if (requestId !== jobsRequestId.current) return;
       setJobs(data);
       if (!data.some((job) => job.id === selectedId)) {
         setSelectedId(data[0]?.id ?? null);
@@ -63,18 +81,21 @@ export default function App() {
       }
       setError("");
     } catch (requestError) {
-      setError("No se pudo conectar con la API. Iniciá el backend en el puerto 8765.");
+      if (requestId === jobsRequestId.current) {
+        setError("No se pudo conectar con la API. Iniciá el backend en el puerto 8765.");
+      }
     } finally {
-      setLoading(false);
+      if (requestId === jobsRequestId.current) setLoading(false);
     }
-  }, [filters, query, selectedId]);
+  }, [filters, query, selectedId, view, strategyConfig.thresholds.maximum_daily_review]);
 
   useEffect(() => {
     Promise.all([
-      api.overview(), api.trends(), api.skills(), api.runs(), api.sources(),
+      api.strategy(), api.overview(), api.trends(), api.skills(), api.runs(), api.sources(),
       api.filterOptions(),
     ])
-      .then(([overviewData, trendData, skillData, runData, sourceData, filterData]) => {
+      .then(([strategyData, overviewData, trendData, skillData, runData, sourceData, filterData]) => {
+        setStrategyConfig(strategyData);
         setOverview(overviewData);
         setTrends(trendData);
         setSkills(skillData);
@@ -99,11 +120,15 @@ export default function App() {
     } else if (view === "today") {
       setFilters((current) => ({
         ...current,
-        minimum_priority: 55,
-        minimum_feasibility: 40,
+        minimum_priority: strategyConfig.thresholds.today_priority,
+        minimum_feasibility: strategyConfig.thresholds.today_feasibility,
       }));
     }
-  }, [view]);
+  }, [
+    view,
+    strategyConfig.thresholds.today_priority,
+    strategyConfig.thresholds.today_feasibility,
+  ]);
 
   useEffect(() => {
     if (!selectedId) return;
@@ -140,9 +165,14 @@ export default function App() {
         <div className="page">
           <div className="page-heading">
             <div><h1>{title[0]}</h1><p>{title[1]}</p></div>
-            <span>Últimos datos locales</span>
+            <span>Estrategia {strategyConfig.version}</span>
           </div>
           {error && <div className="error-banner">{error}</div>}
+          {strategyConfig.status === "needs_review" && (
+            <div className="strategy-banner">
+              <strong>Perfil heredado activo.</strong> {strategyConfig.description}
+            </div>
+          )}
           {(view === "today" || view === "explore") && (
             <OpportunityView
               overview={overview}
@@ -157,6 +187,7 @@ export default function App() {
               loadJobs={loadJobs}
               updateStatus={updateStatus}
               explore={view === "explore"}
+              strategyConfig={strategyConfig}
             />
           )}
           {view === "market" && <MarketView trends={trends} skills={skills} overview={overview} />}
@@ -174,20 +205,25 @@ function OpportunityView(props) {
   const {
     overview, jobs, loading, selectedId, selectedJob, setSelectedId,
     filters, filterOptions, setFilters, loadJobs, updateStatus, explore,
+    strategyConfig,
   } = props;
-  const setScope = (scope) => setFilters({
-    ...filters,
-    scope: filters.scope === scope ? "" : scope,
+  const setScope = (scope) => setFilters((current) => ({
+    ...current,
+    scope: current.scope === scope ? "" : scope,
     country: "",
     work_mode: "",
-  });
+  }));
+  const updateFilters = (updates) => setFilters((current) => ({
+    ...current,
+    ...updates,
+  }));
   const resetFilters = () => setFilters({
     scope: "",
     country: "",
     work_mode: "",
     source: "",
-    minimum_priority: explore ? 0 : 55,
-    minimum_feasibility: explore ? 0 : 40,
+    minimum_priority: explore ? 0 : strategyConfig.thresholds.today_priority,
+    minimum_feasibility: explore ? 0 : strategyConfig.thresholds.today_feasibility,
   });
   const activeFilters = [
     filters.scope && filterOptions.scopes.find((item) => item.value === filters.scope)?.label,
@@ -209,7 +245,7 @@ function OpportunityView(props) {
         <div className="quick-scopes" aria-label="Alcances rápidos">
           <button
             className={!filters.scope && !filters.country && !filters.work_mode ? "scope-chip active" : "scope-chip"}
-            onClick={() => setFilters({ ...filters, scope: "", country: "", work_mode: "" })}
+            onClick={() => updateFilters({ scope: "", country: "", work_mode: "" })}
           >
             <Globe2 size={14} /> Todo
           </button>
@@ -235,7 +271,7 @@ function OpportunityView(props) {
             <span>País</span>
             <select
               value={filters.country}
-              onChange={(event) => setFilters({ ...filters, scope: "", country: event.target.value })}
+              onChange={(event) => updateFilters({ scope: "", country: event.target.value })}
             >
               <option value="">Cualquier país</option>
               {filterOptions.countries.map((country) => (
@@ -249,7 +285,7 @@ function OpportunityView(props) {
             <span>Modalidad</span>
             <select
               value={filters.work_mode}
-              onChange={(event) => setFilters({ ...filters, scope: "", work_mode: event.target.value })}
+              onChange={(event) => updateFilters({ scope: "", work_mode: event.target.value })}
             >
               <option value="">Cualquiera</option>
               <option value="remote">Remoto</option>
@@ -259,7 +295,7 @@ function OpportunityView(props) {
           </label>
           <label>
             <span>Fuente</span>
-            <select value={filters.source} onChange={(event) => setFilters({ ...filters, source: event.target.value })}>
+            <select value={filters.source} onChange={(event) => updateFilters({ source: event.target.value })}>
               <option value="">Todas</option>
               {[
                 "linkedin", "indeed", "computrabajo", "remotive", "hiringroom",
@@ -271,9 +307,10 @@ function OpportunityView(props) {
             <span>Score mínimo</span>
             <select
               value={filters.minimum_priority}
-              onChange={(event) => setFilters({ ...filters, minimum_priority: Number(event.target.value) })}
+              onChange={(event) => updateFilters({ minimum_priority: Number(event.target.value) })}
             >
               <option value="0">Todos</option>
+              <option value="35">35+</option>
               <option value="40">40+</option>
               <option value="55">55+</option>
               <option value="72">72+</option>

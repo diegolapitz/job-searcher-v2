@@ -5,6 +5,7 @@ const json = async (url, options) => {
 };
 
 export const api = {
+  strategy: () => json("/api/strategy"),
   overview: () => json("/api/overview"),
   filterOptions: () => json("/api/filter-options"),
   jobs: (params = {}) => {
